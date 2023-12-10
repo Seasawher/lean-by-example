@@ -17,6 +17,7 @@ lean_lib «NTL» where
 <https://github.com/lurk-lab/yatima/tree/main> からコードの大部分を拝借した
 -/
 section ImportAll
+  def package_name := "NTL"
 
   partial def getLeanFilePaths (fp : FilePath) (acc : Array FilePath := #[]) :
       IO $ Array FilePath := do
@@ -27,7 +28,7 @@ section ImportAll
   open Lean (RBTree)
 
   def getAllFiles : ScriptM $ List String := do
-    let paths := (← getLeanFilePaths ⟨"NTL"⟩).map toString
+    let paths := (← getLeanFilePaths ⟨package_name⟩).map toString
     let paths : RBTree String compare := RBTree.ofList paths.toList -- ordering
     return paths.toList
 
@@ -38,14 +39,14 @@ section ImportAll
     return s!"{"\n".intercalate imports}\n"
 
   script import_all do
-    IO.FS.writeFile ⟨"NTL.lean"⟩ (← getImportsString)
+    IO.FS.writeFile ⟨s!"{package_name}.lean"⟩ (← getImportsString)
     return 0
 
   script import_all? do
-    let importsFromUser ← IO.FS.readFile ⟨"NTL.lean"⟩
+    let importsFromUser ← IO.FS.readFile ⟨s!"{package_name}.lean"⟩
     let expectedImports ← getImportsString
     if importsFromUser != expectedImports then
-      IO.eprintln "Invalid import list in 'NTL.lean'"
+      IO.eprintln s!"Invalid import list in '{package_name}.lean'"
       IO.eprintln "Try running 'lake run import_all'"
       return 1
     return 0
