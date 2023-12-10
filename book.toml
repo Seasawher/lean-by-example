@@ -3,8 +3,8 @@ authors = ["Seasawher"]
 language = "ja"
 multilingual = false
 src = "SRC"
-title = "動かして学ぶ Lean Prover"
-description = "Lean Prover のすぐに動かせるスクリプトを集めました．"
+title = "Lean By Example"
+description = "Lean Prover の短いコード例を解説付きで集めたものです．"
 
 [build]
 create-missing = false
