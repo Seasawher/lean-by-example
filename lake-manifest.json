@@ -55,5 +55,5 @@
    "inputRev": "e9bcfc6e583d0784ece32475ca6f450126ef286f",
    "inherited": false,
    "configFile": "lakefile.lean"}],
- "name": "NTL",
+ "name": "SRC",
  "lakeDir": ".lake"}

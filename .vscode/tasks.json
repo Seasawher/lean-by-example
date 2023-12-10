@@ -5,7 +5,7 @@
       // Lean ファイルから markdown ファイルを生成する
       "label": "lean2md",
       "type": "shell",
-      "command": "python scripts/lean2md.py NTL NTL",
+      "command": "python scripts/lean2md.py SRC SRC",
       "presentation": {
         // 実行するごとにターミナルが開かないようにする
         "reveal": "never"

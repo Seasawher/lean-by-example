@@ -1,14 +1,14 @@
 import Lake
 open Lake DSL
 
-package «NTL» where
+package «SRC» where
   -- add any package configuration options here
 
 require mathlib from git
   "https://github.com/leanprover-community/mathlib4.git" @ "e9bcfc6e583d0784ece32475ca6f450126ef286f"
 
 @[default_target]
-lean_lib «NTL» where
+lean_lib «SRC» where
   -- add any library configuration options here
 
 /-!
@@ -17,7 +17,7 @@ lean_lib «NTL» where
 <https://github.com/lurk-lab/yatima/tree/main> からコードの大部分を拝借した
 -/
 section ImportAll
-  def package_name := "NTL"
+  def package_name := "SRC"
 
   partial def getLeanFilePaths (fp : FilePath) (acc : Array FilePath := #[]) :
       IO $ Array FilePath := do

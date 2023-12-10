@@ -1,7 +1,3 @@
-# lean project
-/build
-/lakefile.olean
-/lake-packages/*
 # After v4.3.0-rc2 lake stores its files here:
 /.lake/
 
@@ -10,5 +6,5 @@
 
 # mdbook
 book/
-NTL/*.md
-!NTL/SUMMARY.md
+SRC/*.md
+!SRC/SUMMARY.md

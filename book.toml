@@ -2,7 +2,7 @@
 authors = ["Seasawher"]
 language = "ja"
 multilingual = false
-src = "NTL"
+src = "SRC"
 title = "動かして学ぶ Lean Prover"
 description = ""
 

@@ -29,7 +29,7 @@ jobs:
         python-version: '3.10'
 
     - name: Run lean2md
-      run: python scripts/lean2md.py NTL NTL
+      run: python scripts/lean2md.py SRC SRC
 
     - name: Setup mdBook
       uses: peaceiris/actions-mdbook@v1
