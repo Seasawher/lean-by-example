@@ -12,6 +12,6 @@ build-dir = "book"
 
 [output.html]
 additional-js = ["assets/leanweb.js", "assets/fzf.umd.js", "assets/elasticlunr.js", "assets/edit.js"]
-git-repository-url = "https://github.com/Seasawher/{repo_name}"
-edit-url-template = "https://raw.githubusercontent.com/Seasawher/{repo_name}/main/{path}"
+git-repository-url = "https://github.com/Seasawher/lean-by-example"
+edit-url-template = "https://raw.githubusercontent.com/Seasawher/lean-by-example/main/{path}"
 no-section-label = true
