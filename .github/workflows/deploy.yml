@@ -36,9 +36,6 @@ jobs:
       with:
         mdbook-version: '0.4.34'
 
-    - name: Install mdbook-indexing
-      run: cargo install mdbook-indexing
-
     - name: Build book
       run: mdbook build
 

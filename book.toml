@@ -15,5 +15,3 @@ additional-js = ["assets/leanweb.js", "assets/fzf.umd.js", "assets/elasticlunr.j
 git-repository-url = "https://github.com/Seasawher/number-theory-with-lean"
 edit-url-template = "https://raw.githubusercontent.com/Seasawher/number-theory-with-lean/main/{path}"
 no-section-label = true
-
-[preprocessor.indexing]
