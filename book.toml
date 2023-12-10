@@ -1,0 +1,19 @@
+[book]
+authors = ["Seasawher"]
+language = "ja"
+multilingual = false
+src = "NTL"
+title = "Lean で学ぶ初めての整数論"
+description = "定理証明支援系 Lean を使って整数論を学びます．"
+
+[build]
+create-missing = false
+build-dir = "book"
+
+[output.html]
+additional-js = ["assets/leanweb.js", "assets/fzf.umd.js", "assets/elasticlunr.js", "assets/edit.js"]
+git-repository-url = "https://github.com/Seasawher/number-theory-with-lean"
+edit-url-template = "https://raw.githubusercontent.com/Seasawher/number-theory-with-lean/main/{path}"
+no-section-label = true
+
+[preprocessor.indexing]

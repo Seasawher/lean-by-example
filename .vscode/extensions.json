@@ -1,0 +1,7 @@
+{
+  // 推奨拡張機能
+  "recommendations": [
+    "gruntfuggly.triggertaskonsave",
+    "leanprover.lean4"
+  ]
+}

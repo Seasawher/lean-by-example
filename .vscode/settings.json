@@ -1,0 +1,8 @@
+{
+  "triggerTaskOnSave.tasks": {
+    "lean2md": [
+        "NTL/*.lean",
+    ],
+  },
+  "editor.wordWrap": "on",
+}

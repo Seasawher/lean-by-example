@@ -1,0 +1,14 @@
+# lean project
+/build
+/lakefile.olean
+/lake-packages/*
+# After v4.3.0-rc2 lake stores its files here:
+/.lake/
+
+# python project
+.mypy_cache/
+
+# mdbook
+book/
+NTL/*.md
+!NTL/SUMMARY.md

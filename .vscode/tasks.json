@@ -1,0 +1,15 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      // Lean ファイルから markdown ファイルを生成する
+      "label": "lean2md",
+      "type": "shell",
+      "command": "python scripts/lean2md.py NTL NTL",
+      "presentation": {
+        // 実行するごとにターミナルが開かないようにする
+        "reveal": "never"
+      }
+    },
+  ]
+}
