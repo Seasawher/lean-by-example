@@ -59,25 +59,10 @@ end s2 --#
 
 停止証明を行うには，再帰のたびに「何か」が着実に減少すること，そして無限に減少し続けることはありえないことを証明する必要があります．
 
-`termination_by` で再帰のたびに減少するはずの「何か」を指定することができ，`decreasing_by` でそれが実際に減少することの証明を提供することができます．`sorry` を使うと関数が停止することを Lean に信じさせることができます．
+`termination_by` で再帰のたびに減少するはずの「何か」を指定することができ，`decreasing_by` でそれが実際に減少することの証明を提供することができます．
+
+ここでは `termination_by` だけで停止性を証明することができます．例えば，次のようにします:
 -/
-namespace s3 --#
-
-def selection_sort (l : List α) : List α :=
-  let min := minimum l
-  match min with
-  | ⊤ => []
-  | some μ =>
-    μ :: selection_sort (l.erase μ)
-  termination_by _ l => l.length
-  decreasing_by
-    simp_wf
-    sorry
-
-end s3 --#
-
-/-! 実際に証明を埋めると，たとえば次のようになります．-/
-
 namespace s4 --#
 
 def selection_sort (l : List α) : List α := by
