@@ -44,13 +44,13 @@ end s1 --#
 /-! ここでは3番目の方法を採用することにします．そうすると，選択ソートは次のように実装できます．-/
 namespace s2 --#
 
-partial def SelectionSort (l : List α) : List α :=
+partial def selection_sort (l : List α) : List α :=
   let min := minimum? l
   match min with
   | none => []
-  | some μ => μ :: SelectionSort (l.erase μ)
+  | some μ => μ :: selection_sort (l.erase μ)
 
-#guard SelectionSort [1, 4, 2, 10, 6] = [1, 2, 4, 6, 10]
+#guard selection_sort [1, 4, 2, 10, 6] = [1, 2, 4, 6, 10]
 
 end s2 --#
 /-! ここで `def` の前についている `partial` というのは，停止することが保証されていない関数を実行するのに必要なキーワードです．`partial` を消すと，エラーになってしまいます．-/
@@ -63,12 +63,12 @@ end s2 --#
 -/
 namespace s3 --#
 
-def SelectionSort (l : List α) : List α :=
+def selection_sort (l : List α) : List α :=
   let min := minimum l
   match min with
   | ⊤ => []
   | some μ =>
-    μ :: SelectionSort (l.erase μ)
+    μ :: selection_sort (l.erase μ)
   termination_by _ l => l.length
   decreasing_by
     simp_wf
@@ -80,7 +80,7 @@ end s3 --#
 
 namespace s4 --#
 
-def SelectionSort (l : List α) : List α := by
+def selection_sort (l : List α) : List α := by
   let min := minimum l
   match h : min with
   | ⊤ => exact []
@@ -99,7 +99,7 @@ def SelectionSort (l : List α) : List α := by
       _ = rest.length + 1 := by rw [← length_erase_add_one mem]
       _ > rest.length := by simp_arith
 
-    exact μ :: SelectionSort rest
+    exact μ :: selection_sort rest
 
   -- 再帰呼び出しのたびにリストの長さが短くなるので，有限回で停止
   termination_by _ l => l.length
