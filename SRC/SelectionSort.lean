@@ -22,7 +22,6 @@ variable {α : Type*} [LinearOrder α]
 
 の少なくとも3通りの対処法が考えられます．
 -/
-namespace s1 --#
 
 -- `Option` 型を返すバージョン
 #guard minimum? [1, 4, 2, 10, 6] = some 1
@@ -31,23 +30,20 @@ namespace s1 --#
 
 -- 定義域を制限するバージョン
 -- 配列が空でないことの証明を引数に要求する
-theorem h : 0 < [1, 4, 2, 10, 6].length := by trivial
-
-#guard minimum_of_length_pos h = 1
+#guard minimum_of_length_pos (show 0 < [1, 4, 2, 10, 6].length from by trivial) = 1
 
 -- 空リストに対してだけ特別な値 `⊤` を返す
 #guard minimum [1, 4, 2, 10, 6] = 1
 
 #guard minimum ([] : List ℕ) = ⊤
 
-end s1 --#
 /-! ここでは3番目の方法を採用することにします．そうすると，選択ソートは次のように実装できます．-/
 namespace s2 --#
 
 partial def selection_sort (l : List α) : List α :=
-  let min := minimum? l
+  let min := minimum l
   match min with
-  | none => []
+  | ⊤ => []
   | some μ => μ :: selection_sort (l.erase μ)
 
 #guard selection_sort [1, 4, 2, 10, 6] = [1, 2, 4, 6, 10]
