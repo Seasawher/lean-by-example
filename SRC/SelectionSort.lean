@@ -38,7 +38,7 @@ variable {α : Type*} [LinearOrder α]
 #guard minimum ([] : List ℕ) = ⊤
 
 /-! ここでは3番目の方法を採用することにします．そうすると，選択ソートは次のように実装できます．-/
-namespace s2 --#
+namespace Partial --#
 
 partial def selection_sort (l : List α) : List α :=
   let min := minimum l
@@ -48,7 +48,7 @@ partial def selection_sort (l : List α) : List α :=
 
 #guard selection_sort [1, 4, 2, 10, 6] = [1, 2, 4, 6, 10]
 
-end s2 --#
+end Partial --#
 /-! ここで `def` の前についている `partial` というのは，停止することが保証されていない関数を実行するのに必要なキーワードです．`partial` を消すと，エラーになってしまいます．-/
 
 /-! ## 停止証明付きの実装
@@ -59,7 +59,6 @@ end s2 --#
 
 ここでは `termination_by` だけで停止性を証明することができます．例えば，次のようにします:
 -/
-namespace s4 --#
 
 def selection_sort (l : List α) : List α := by
   let min := minimum l
@@ -85,4 +84,3 @@ def selection_sort (l : List α) : List α := by
   -- 再帰呼び出しのたびにリストの長さが短くなるので，有限回で停止
   termination_by _ l => l.length
 
-end s4 --#
