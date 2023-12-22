@@ -37,14 +37,22 @@ variable {α : Type*} [LinearOrder α]
 
 #guard minimum ([] : List ℕ) = ⊤
 
-/-! ここでは3番目の方法を採用することにします．そうすると，選択ソートは次のように実装できます．-/
+/-! ここでは2番目の方法を採用することにします．そうすると，選択ソートは次のように実装できます．-/
 namespace Partial --#
 
 partial def selection_sort (l : List α) : List α :=
-  let min := minimum l
-  match min with
-  | ⊤ => []
-  | some μ => μ :: selection_sort (l.erase μ)
+  if hl : 0 < l.length then
+    -- 最小値を選択する
+    let μ : α := minimum_of_length_pos hl
+
+    -- リストから取り除く
+    let rest := l.erase μ
+
+    -- 最小値を先頭にする
+    -- これを再帰的に繰り返す
+    μ :: (selection_sort rest)
+  else
+    []
 
 #guard selection_sort [1, 4, 2, 10, 6] = [1, 2, 4, 6, 10]
 
@@ -60,27 +68,128 @@ end Partial --#
 ここでは `termination_by` だけで停止性を証明することができます．例えば，次のようにします:
 -/
 
-def selection_sort (l : List α) : List α := by
-  let min := minimum l
-  match h : min with
-  | ⊤ => exact []
-  | some μ =>
-    -- `μ` は `l` に属する
+/-- 選択ソート -/
+def selection_sort (l : List α) : List α :=
+  if hl : 0 < l.length then
+    let μ : α := minimum_of_length_pos hl
+
+    -- `μ` はリストの要素
     have mem : μ ∈ l := by
       apply minimum_mem
-      aesop
+      simp [coe_minimum_of_length_pos]
 
-    -- `μ` を削除した残り
     let rest := l.erase μ
 
-    -- `rest` の長さは `l` より小さい
+    -- 停止性を示すための補題
     have : l.length > rest.length := calc
       l.length
       _ = rest.length + 1 := by rw [← length_erase_add_one mem]
       _ > rest.length := by simp_arith
 
-    exact μ :: selection_sort rest
-
-  -- 再帰呼び出しのたびにリストの長さが短くなるので，有限回で停止
+    μ :: (selection_sort rest)
+  else
+    []
+  -- 再帰呼び出しのたびにリストの長さが短くなるので，有限回で停止する
   termination_by _ l => l.length
 
+/-! ## ソートであることの証明
+`selection_sort` がソートであることを証明します． ソートであるということを示すには，リスト `l : List α` に対して
+
+1. `selection_sort l` が `l` の置換（要素を並び替えたもの）であること
+2. `selection_sort l` の要素が大小関係の順に並んでいること
+
+の2つを示せば十分です．
+
+### 置換であること
+リスト `l1` が `l2` の置換であることは `l1 ~ l2` と書くことができます．
+-/
+
+/-- 選択ソートが返すリストは，元のリストと要素の順番だけしか異ならない -/
+theorem perm_selection_sort (l : List α) : l ~ selection_sort l := by
+  -- リスト `l` の長さに対する帰納法を使う
+  induction' ih : l.length generalizing l
+
+  -- `selection_sort` を展開する
+  all_goals
+    unfold selection_sort
+    simp_all [ih]
+
+  -- リストの長さが 0 のとき
+  case zero => exact length_eq_zero.mp ih
+
+  -- リストの長さが `n + 1` であるとき
+  case succ n IH =>
+    -- ゴールが複雑で見づらいので変数を導入する
+    set μ := minimum_of_length_pos (_ : 0 < length l)
+    set rest := l.erase μ
+
+    -- `μ` が `l` の要素であることを再度示す
+    have mem : μ ∈ l := by
+      apply minimum_mem
+      simp [coe_minimum_of_length_pos]
+
+    -- `rest` の長さについての補題を再度示す
+    have rlen : rest.length = n := by
+      convert List.length_erase_of_mem mem
+      simp [ih]
+
+    -- 帰納法の仮定により，`selection_sort rest ~ rest` が言える
+    have hr : selection_sort rest ~ rest := Perm.symm (IH rest rlen)
+
+    -- 置換の推移性により，`l ~ μ :: rest` を示せばいい
+    suffices l ~ μ :: rest from by
+      apply this.trans
+      simp [hr.symm]
+
+    -- `List.erase` の性質から示せる
+    exact perm_cons_erase mem
+
+/-! ### 要素を整列させること
+次に，`selection_sort l` の要素が大小関係の順に並んでいること，つまりソート済みであることを示します．
+-/
+
+/-- selection sort が返すリストは，並び替え済み -/
+theorem sorted_selection_sort (l : List α) : Sorted (· ≤ ·) $ selection_sort l := by
+  -- リスト `l` の長さに対する帰納法を使う
+  induction' ih : l.length generalizing l
+
+  -- `selection_sort` を展開する
+  all_goals
+    unfold selection_sort
+    simp_all [ih]
+
+  case succ n IH =>
+    -- ゴールが複雑で見づらいので変数を導入する
+    set μ := minimum_of_length_pos (_ : 0 < length l)
+    set rest := l.erase μ
+
+    -- `rest` は `l` の部分集合
+    have rsub : rest ⊆ l := erase_subset μ l
+
+    -- `selection_sort` が置換を返すことを利用する
+    have rperm : selection_sort rest ~ rest := by
+      exact Perm.symm (perm_selection_sort rest)
+
+    -- `selection_sort rest` は `l` の部分集合
+    have subh : selection_sort rest ⊆ l := by
+      exact (Perm.subset_congr_left (id (Perm.symm rperm))).mp rsub
+
+    constructor
+    case left =>
+      -- 最小値は残りの部分のどの要素よりも小さいことを示す
+      show ∀ (b : α), b ∈ selection_sort rest → minimum l ≤ ↑b
+      intro b hb
+      exact minimum_le_of_mem' (subh hb)
+    case right =>
+      -- 残りの部分がソート済みであることを示す
+      show Sorted (· ≤ ·) (selection_sort rest)
+      apply IH rest
+
+      -- `μ` が `l` の要素であることを再度示す(3回目)
+      have mem : μ ∈ l := by
+        apply minimum_mem
+        simp [coe_minimum_of_length_pos]
+
+      -- あとは `rest` の長さが `n` であることを示すだけ
+      convert List.length_erase_of_mem mem
+      simp [ih]
