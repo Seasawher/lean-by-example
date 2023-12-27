@@ -6,6 +6,8 @@
 
 - [Hello World](./HelloWorld.md)
 
+- [FizzBuzz](./FizzBuzz.md)
+
 - [関数の適用](./ApplyFunction.md)
 
 - [Fibonacci 数列](./Fibonacci.md)
